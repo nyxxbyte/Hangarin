@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Hangarin: My Eras ✨</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #fbcfe8, #e9d5ff);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #4c1d95;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        .header {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .task-board {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .task-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            width: 300px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .task-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .pill {
+            display: inline-block;
+            background: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-right: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        ☁️ Main Character Tracker ☁️
+    </div>
+
+    <div class="task-board">
+        {% for task in tasks %}
+        <div class="task-card">
+            <div class="task-title">✨ {{ task.title }}</div>
+            <p>{{ task.description }}</p>
+            <div class="pill">🎀 {{ task.category.name }} Era</div>
+            <div class="pill">🚨 Vibe: {{ task.priority.name }}</div>
+            
+            <div style="font-size: 0.9em; margin-top: 15px;">
+                <strong>Baby Steps:</strong>
+                <ul>
+                    {% for sub in task.subtask_set.all %}
+                        <li>{{ sub.title }} - <em>{{ sub.status }}</em></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
