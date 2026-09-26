@@ -1,8 +1,150 @@
-from django.shortcuts import render
-from .models import Task
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Task, SubTask, Note, Goal
 
-def home(request):
+DEFAULT_PILLARS = [
+    {
+        'title': 'Academic Arc',
+        'category': 'study',
+        'subtasks': ['ComSci Project', 'Review Lecture Notes']
+    },
+    {
+        'title': 'Headspace',
+        'category': 'mental',
+        'subtasks': ['Take a break from socmed', '10 mins meditation']
+    },
+    {
+        'title': 'Body & Health',
+        'category': 'physical',
+        'subtasks': ['Take a walk or exercise', '10 mins stretching']
+    },
+    {
+        'title': 'Nourish & Hydrate',
+        'category': 'food',
+        'subtasks': ['Drink water (8 glasses)', 'Eat a healthy meal']
+    }
+]
 
-    tasks = Task.objects.all()
+def ensure_default_tasks():
+    if not Task.objects.exists():
+        for item in DEFAULT_PILLARS:
+            task = Task.objects.create(
+                title=item['title'],
+                category=item['category'],
+                is_default=True
+            )
+            for sub_title in item['subtasks']:
+                SubTask.objects.create(task=task, title=sub_title)
 
-    return render(request, 'home.html', {'tasks': tasks})
+# --- Navigation & Pages ---
+
+def dashboard_view(request):
+    ensure_default_tasks()
+    context = {
+        'tasks': Task.objects.all(),
+        'active_tab': 'dashboard'
+    }
+    return render(request, 'dashboard.html', context)
+
+def notes_view(request):
+    context = {
+        'notes': Note.objects.all().order_by('-created_at'),
+        'active_tab': 'notes'
+    }
+    return render(request, 'dashboard.html', context)
+
+def goals_view(request):
+    context = {
+        'goals': Goal.objects.all(),
+        'active_tab': 'goals'
+    }
+    return render(request, 'dashboard.html', context)
+
+def settings_view(request):
+    return render(request, 'dashboard.html', {'active_tab': 'settings'})
+
+# --- Dashboard Actions ---
+
+def toggle_subtask(request, subtask_id):
+    subtask = get_object_or_404(SubTask, id=subtask_id)
+    subtask.is_completed = not subtask.is_completed
+    subtask.save()
+    return redirect('dashboard')
+
+def delete_subtask(request, subtask_id):
+    subtask = get_object_or_404(SubTask, id=subtask_id)
+    subtask.delete()
+    return redirect('dashboard')
+
+def add_subtask(request, task_id):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        due_date = request.POST.get('due_date')
+        if title:
+            task = get_object_or_404(Task, id=task_id)
+            SubTask.objects.create(
+                task=task,
+                title=title.strip(),
+                due_date=due_date if due_date else None
+            )
+    return redirect('dashboard')
+
+def replace_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    task.delete()
+    return redirect('dashboard')
+
+def add_custom_task(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        category = request.POST.get('category', 'custom')
+        if title and title.strip():
+            Task.objects.create(title=title.strip(), category=category.strip() or 'custom', is_default=False)
+    return redirect('dashboard')
+
+# --- Lore Dump Actions ---
+
+def add_note(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        if title and content:
+            Note.objects.create(title=title.strip(), content=content.strip())
+    return redirect('notes')
+
+def delete_note(request, note_id):
+    note = get_object_or_404(Note, id=note_id)
+    note.delete()
+    return redirect('notes')
+
+# --- The Vision Actions ---
+
+def add_goal(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        target_date = request.POST.get('target_date')
+        progress = request.POST.get('progress', 0)
+        if title:
+            Goal.objects.create(
+                title=title.strip(),
+                target_date=target_date if target_date else None,
+                progress=int(progress) if progress else 0
+            )
+    return redirect('goals')
+
+def delete_goal(request, goal_id):
+    goal = get_object_or_404(Goal, id=goal_id)
+    goal.delete()
+    return redirect('goals')
+
+# --- Control Center Actions ---
+
+def clear_completed_tasks(request):
+    SubTask.objects.filter(is_completed=True).delete()
+    return redirect('dashboard')
+
+def reset_all_data(request):
+    Task.objects.all().delete()
+    Note.objects.all().delete()
+    Goal.objects.all().delete()
+    ensure_default_tasks()
+    return redirect('dashboard')

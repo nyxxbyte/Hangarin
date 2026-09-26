@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Hangarin: The Blueprint ✨</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: linear-gradient(135deg, #fbcfe8, #e9d5ff);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #4c1d95;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .sidebar-brand { font-size: 1.4em; font-weight: bold; color: #4c1d95; }
+        .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .nav-link {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; text-decoration: none;
+            color: #5b21b6; font-weight: 600; border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.8);
+            color: #4c1d95; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- Main Content --- */
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        .header-container { margin-bottom: 25px; }
+        .header-title { font-size: 2em; font-weight: bold; }
+
+        /* --- Input Cards & Forms --- */
+        .form-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 16px; margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .input-field, .textarea-field {
+            padding: 10px 14px; border-radius: 10px;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            background: rgba(255, 255, 255, 0.9); font-size: 0.9em;
+            color: #4c1d95; outline: none; width: 100%;
+        }
+        .textarea-field { resize: vertical; min-height: 80px; font-family: inherit; }
+        .btn-primary {
+            background: #7c3aed; color: white; border: none;
+            padding: 10px 18px; border-radius: 10px; font-weight: 600;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .btn-primary:hover { background: #6d28d9; }
+        .btn-danger {
+            background: #ef4444; color: white; border: none;
+            padding: 10px 18px; border-radius: 10px; font-weight: 600;
+            cursor: pointer; text-decoration: none; display: inline-block;
+        }
+
+        /* --- Dashboard Grid --- */
+        .task-board, .grid-board {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px;
+        }
+        .task-card, .content-card {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px); border-radius: 20px; padding: 24px;
+            box-shadow: 0 10px 30px rgba(76, 29, 149, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        /* --- Subtask Items --- */
+        .subtasks-section { border-top: 1px solid rgba(124, 58, 237, 0.15); padding-top: 15px; }
+        .subtask-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .subtask-item {
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 0.9em; background: rgba(255, 255, 255, 0.45);
+            padding: 8px 12px; border-radius: 10px;
+        }
+        .check-btn {
+            text-decoration: none; width: 22px; height: 22px; border-radius: 6px;
+            background: white; display: inline-flex; align-items: center; justify-content: center;
+            font-size: 0.85em; font-weight: bold; color: #4c1d95; border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+        .completed-text { text-decoration: line-through; opacity: 0.55; }
+        .due-badge {
+            font-size: 0.75em; padding: 3px 8px; border-radius: 8px;
+            background: #f3e8ff; color: #6b21a8; font-weight: 600;
+        }
+
+        /* --- Progress Bar for Goals --- */
+        .progress-bar-bg {
+            background: rgba(124, 58, 237, 0.15); height: 10px; border-radius: 10px;
+            overflow: hidden; margin: 10px 0;
+        }
+        .progress-bar-fill { background: #7c3aed; height: 100%; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="sidebar-brand">☁️ Hangarin</div>
+        <ul class="nav-menu">
+            <li><a href="{% url 'dashboard' %}" class="nav-link {% if active_tab == 'dashboard' %}active{% endif %}">📌 Dashboard</a></li>
+            <li><a href="{% url 'notes' %}" class="nav-link {% if active_tab == 'notes' %}active{% endif %}">📝 Lore Dump</a></li>
+            <li><a href="{% url 'goals' %}" class="nav-link {% if active_tab == 'goals' %}active{% endif %}">🎯 The Vision</a></li>
+            <li><a href="{% url 'settings' %}" class="nav-link {% if active_tab == 'settings' %}active{% endif %}">⚙️ Control Center</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- DASHBOARD TAB -->
+        {% if active_tab == 'dashboard' %}
+            <div class="header-container"><h1 class="header-title">The Blueprint ☁️</h1></div>
+
+            <div class="form-card">
+                <form action="{% url 'add_custom_task' %}" method="POST" style="display: flex; gap: 10px;">
+                    {% csrf_token %}
+                    <input type="text" name="title" class="input-field" placeholder="New Focus Card Title..." style="flex: 2;" required>
+                    <input type="text" name="category" class="input-field" placeholder="Category Tag..." style="flex: 1;">
+                    <button type="submit" class="btn-primary">+ Start New Focus</button>
+                </form>
+            </div>
+
+            <div class="task-board">
+                {% for task in tasks %}
+                <div class="task-card">
+                    <div style="margin-bottom: 12px;">
+                        <h2 style="font-size: 1.25em; font-weight: 700;">✨ {{ task.title }}</h2>
+                        <span style="background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 12px; font-size: 0.8em;">🎀 {{ task.category|title }}</span>
+                    </div>
+
+                    <div class="subtasks-section">
+                        <ul class="subtask-list">
+                            {% for sub in task.subtask_set.all %}
+                            <li class="subtask-item">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <a href="{% url 'toggle_subtask' sub.id %}" class="check-btn">{% if sub.is_completed %}✓{% endif %}</a>
+                                    <span class="{% if sub.is_completed %}completed-text{% endif %}">{{ sub.title }}</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    {% if sub.due_date %}<span class="due-badge">deadline: {{ sub.due_date|date:"Y-m-d" }}</span>{% endif %}
+                                    <a href="{% url 'delete_subtask' sub.id %}" style="text-decoration: none; color: #991b1b; font-weight: bold;">×</a>
+                                </div>
+                            </li>
+                            {% empty %}
+                            <li style="font-size: 0.85em; opacity: 0.6;">No tasks or reminders yet.</li>
+                            {% endfor %}
+                        </ul>
+
+                        <form action="{% url 'add_subtask' task.id %}" method="POST" style="display: flex; flex-direction: column; gap: 6px;">
+                            {% csrf_token %}
+                            <div style="display: flex; gap: 6px;">
+                                <input type="text" name="title" class="input-field" placeholder="Add task or reminder..." required>
+                                <button type="submit" class="btn-primary">Add</button>
+                            </div>
+                            <input type="date" name="due_date" class="input-field" style="width: 100%;">
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        <!-- LORE DUMP TAB (NOTES) -->
+        {% elif active_tab == 'notes' %}
+            <div class="header-container"><h1 class="header-title">📝 Lore Dump</h1></div>
+
+            <div class="form-card">
+                <form action="{% url 'add_note' %}" method="POST" style="display: flex; flex-direction: column; gap: 10px;">
+                    {% csrf_token %}
+                    <input type="text" name="title" class="input-field" placeholder="Entry Title or Thought..." required>
+                    <textarea name="content" class="textarea-field" placeholder="Write down your thoughts, notes, or plot points here..." required></textarea>
+                    <button type="submit" class="btn-primary" style="align-self: flex-start;">+ Save Note</button>
+                </form>
+            </div>
+
+            <div class="grid-board">
+                {% for note in notes %}
+                <div class="content-card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                        <h3 style="font-size: 1.1em; color: #3b0764;">{{ note.title }}</h3>
+                        <a href="{% url 'delete_note' note.id %}" style="text-decoration: none; color: #991b1b; font-weight: bold;">×</a>
+                    </div>
+                    <p style="font-size: 0.9em; white-space: pre-line; line-height: 1.5; margin-bottom: 12px;">{{ note.content }}</p>
+                    <span style="font-size: 0.75em; opacity: 0.6;">Posted {{ note.created_at|date:"M d, Y h:i A" }}</span>
+                </div>
+                {% empty %}
+                <p style="opacity: 0.6;">No notes saved yet. Write your first entry above!</p>
+                {% endfor %}
+            </div>
+
+        <!-- THE VISION TAB (GOALS) -->
+        {% elif active_tab == 'goals' %}
+            <div class="header-container"><h1 class="header-title">🎯 The Vision</h1></div>
+
+            <div class="form-card">
+                <form action="{% url 'add_goal' %}" method="POST" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    {% csrf_token %}
+                    <input type="text" name="title" class="input-field" placeholder="Goal Title (e.g. Master Python)..." style="flex: 2;" required>
+                    <input type="number" name="progress" class="input-field" placeholder="Progress % (0-100)" min="0" max="100" style="flex: 1;">
+                    <input type="date" name="target_date" class="input-field" style="flex: 1;">
+                    <button type="submit" class="btn-primary">+ Add Goal</button>
+                </form>
+            </div>
+
+            <div class="grid-board">
+                {% for goal in goals %}
+                <div class="content-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 1.1em; color: #3b0764;">{{ goal.title }}</h3>
+                        <a href="{% url 'delete_goal' goal.id %}" style="text-decoration: none; color: #991b1b; font-weight: bold;">×</a>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: {{ goal.progress }}%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8em; opacity: 0.8;">
+                        <span>Progress: {{ goal.progress }}%</span>
+                        {% if goal.target_date %}<span>Target: {{ goal.target_date|date:"Y-m-d" }}</span>{% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p style="opacity: 0.6;">No long-term goals set yet. Add one above!</p>
+                {% endfor %}
+            </div>
+
+        <!-- CONTROL CENTER TAB (SETTINGS) -->
+        {% elif active_tab == 'settings' %}
+            <div class="header-container"><h1 class="header-title">⚙️ Control Center</h1></div>
+
+            <div class="content-card" style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">
+                <div>
+                    <h3>🧹 Maintenance Actions</h3>
+                    <p style="font-size: 0.85em; opacity: 0.7; margin-bottom: 10px;">Clear out checked items or reset the app back to defaults.</p>
+                </div>
+                <div>
+                    <a href="{% url 'clear_completed' %}" class="btn-primary" style="text-decoration: none; display: inline-block;">Clear Completed Quests</a>
+                </div>
+                <hr style="border: 0; border-top: 1px solid rgba(124, 58, 237, 0.2);">
+                <div>
+                    <a href="{% url 'reset_data' %}" class="btn-danger">Reset All App Data</a>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
