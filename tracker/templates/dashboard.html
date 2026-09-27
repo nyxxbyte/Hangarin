@@ -1,10 +1,18 @@
+{% load pwa %}
+{% load static %}
 {% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load pwa %}
+    {% progressive_web_app_meta %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>✨ Hangarin: My Daily Checklist ✨</title>
+
+    <!-- Progressive Web App Meta -->
+    {% progressive_web_app_meta %}
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -115,16 +123,16 @@
         <div class="sidebar-brand">☁️ Hangarin</div>
 
         <!-- User Authentication Section -->
-    <div style="margin-bottom: 15px;">
-        {% if user.is_authenticated %}
-            <p style="font-size: 0.85em; font-weight: 600;">Welcome, {{ user.first_name|default:user.username }}! ✨</p>
-            <a href="{% url 'account_logout' %}" style="font-size: 0.8em; color: #ef4444; text-decoration: none; font-weight: bold;">Logout</a>
-         {% else %}
-        <a href="{% provider_login_url 'google' %}" class="btn-primary" style="display: block; text-align: center; text-decoration: none; font-size: 0.85em;">
-            Sign in with Google
-        </a>
-         {% endif %}
-    </div>
+        <div style="margin-bottom: 15px;">
+            {% if user.is_authenticated %}
+                <p style="font-size: 0.85em; font-weight: 600;">Welcome, {{ user.first_name|default:user.username }}! ✨</p>
+                <a href="{% url 'account_logout' %}" style="font-size: 0.8em; color: #ef4444; text-decoration: none; font-weight: bold;">Logout</a>
+            {% else %}
+                <a href="{% provider_login_url 'google' %}" class="btn-primary" style="display: block; text-align: center; text-decoration: none; font-size: 0.85em;">
+                    Sign in with Google
+                </a>
+            {% endif %}
+        </div>
 
         <ul class="nav-menu">
             <li><a href="{% url 'dashboard' %}" class="nav-link {% if active_tab == 'dashboard' %}active{% endif %}">📌 Dashboard</a></li>
@@ -153,9 +161,21 @@
             <div class="task-board">
                 {% for task in tasks %}
                 <div class="task-card">
-                    <div style="margin-bottom: 12px;">
-                        <h2 style="font-size: 1.25em; font-weight: 700;">✨ {{ task.title }}</h2>
-                        <span style="background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 12px; font-size: 0.8em;">🎀 {{ task.category|title }}</span>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                        <div>
+                            <h2 style="font-size: 1.25em; font-weight: 700;">✨ {{ task.title }}</h2>
+                            <span style="background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 12px; font-size: 0.8em; display: inline-block; margin-top: 4px;">🎀 {{ task.category|title }}</span>
+                        </div>
+                        
+                        <!-- Delete Card Action -->
+                        {% if task.id %}
+                        <form action="{% url 'delete_task' task.id %}" method="POST" style="margin: 0;">
+                            {% csrf_token %}
+                            <button type="submit" title="Delete Card" style="background: none; border: none; color: #ef4444; font-weight: bold; cursor: pointer; font-size: 1.2em;">
+                                ×
+                            </button>
+                        </form>
+                        {% endif %}
                     </div>
 
                     <div class="subtasks-section">
@@ -272,5 +292,14 @@
 
     </div>
 
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register("{% static 'serviceworker.js' %}")
+                .then(reg => console.log('PWA Service Worker registered:', reg.scope))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        });
+    }
+</script>
 </body>
 </html>

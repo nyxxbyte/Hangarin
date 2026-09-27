@@ -7,6 +7,7 @@ urlpatterns = [
     path('notes/', views.notes_view, name='notes'),
     path('goals/', views.goals_view, name='goals'),
     path('settings/', views.settings_view, name='settings'),
+    path('delete-task/<int:task_id>/', views.replace_task, name='delete_task'),
 
     # Task & Subtask Actions
     path('toggle-subtask/<int:subtask_id>/', views.toggle_subtask, name='toggle_subtask'),

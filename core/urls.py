@@ -3,6 +3,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),  # Allauth routes
+    path('accounts/', include('allauth.urls')),
+    path('', include('pwa.urls')),  # <-- Add PWA routes here
     path('', include('tracker.urls')),
 ]

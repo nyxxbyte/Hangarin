@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,10 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'pwa',
+
     'tracker',
 ]
 
@@ -145,6 +149,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
@@ -154,3 +163,34 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'tracker/static'),
+]
+
+PWA_APP_NAME = 'Hangarin'
+PWA_APP_DESCRIPTION = 'Your ultimate life organizer and habit tracker.'
+PWA_APP_THEME_COLOR = '#7c3aed'
+PWA_APP_BACKGROUND_COLOR = '#e9d5ff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'portrait'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [
+    {
+        'src': '/static/images/icon.png', 
+        'sizes': '160x160'
+    },
+    {
+        'src': 'https://cdn-icons-png.flaticon.com/512/3237/3237472.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': 'https://cdn-icons-png.flaticon.com/512/3237/3237472.png',
+        'sizes': '512x512'
+    }
+]
+
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static', 'serviceworker.js')

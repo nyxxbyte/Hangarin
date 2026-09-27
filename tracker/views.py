@@ -101,6 +101,12 @@ def add_custom_task(request):
             Task.objects.create(title=title.strip(), category=category.strip() or 'custom', is_default=False)
     return redirect('dashboard')
 
+def delete_task(request, task_id):
+    if request.method == "POST":
+        task = get_object_or_404(Task, id=task_id)
+        task.delete()
+    return redirect('dashboard')
+
 # --- Lore Dump Actions ---
 
 def add_note(request):
