@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
     'pwa',
 
     'tracker',
@@ -87,7 +88,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+       'DIRS': [
+            BASE_DIR / 'tracker' / 'templates',  
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

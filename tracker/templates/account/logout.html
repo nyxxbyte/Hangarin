@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Out - Hangarin</title>
+</head>
+<body style="background-color: #fcf4f9; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+    <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(124, 58, 237, 0.1); max-width: 400px; width: 100%; text-align: center; border: 1px solid #f3e8ff;">
+            
+            <div style="font-size: 3rem; margin-bottom: 10px;">👋</div>
+            
+            <h2 style="color: #7c3aed; font-size: 1.8rem; margin-bottom: 8px; font-weight: 700;">Sign Out</h2>
+            <p style="color: #6b7280; font-size: 0.95rem; margin-bottom: 24px;">Are you sure you want to log out of your Hangarin account?</p>
+
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                {% endif %}
+
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button type="submit" style="width: 100%; padding: 12px; background: #ef4444; border: none; border-radius: 12px; color: white; font-weight: bold; font-size: 0.95rem; cursor: pointer;">
+                        Yes, Sign Out
+                    </button>
+                    <a href="{% url 'dashboard' %}" style="display: block; width: 100%; padding: 12px; background: #f3e8ff; border-radius: 12px; color: #7c3aed; font-weight: 600; text-decoration: none; font-size: 0.95rem; box-sizing: border-box;">
+                        Cancel & Return
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
