@@ -8,24 +8,40 @@
     <title>Hangarin</title>
 
     <style>
-      /* Hide mobile elements on desktop */
+      /* Hide mobile navigation controls on desktop screens */
       .mobile-header,
       .mobile-bottom-nav {
         display: none;
       }
 
-      /* Mobile Styles (768px and smaller) */
+      /* Desktop Layout Grid Defaults */
+      .app-layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .app-sidebar {
+        width: 260px;
+        flex-shrink: 0;
+      }
+
+      .app-main {
+        flex-grow: 1;
+        width: calc(100% - 260px);
+      }
+
+      /* Mobile Responsive Layout Modifications (768px and smaller) */
       @media (max-width: 768px) {
         body {
-          padding-bottom: 70px; /* Space so bottom nav doesn't cover content */
+          padding-bottom: 70px; /* Reserves space so bottom nav doesn't cover checklist items */
         }
 
-        /* Top Mobile Header */
+        /* Top Sticky Header Bar with Menu Button */
         .mobile-header {
           display: flex;
           align-items: center;
           gap: 12px;
-          padding: 10px 16px;
+          padding: 12px 16px;
           background: #ffffff;
           border-bottom: 1px solid #e5e7eb;
           position: sticky;
@@ -49,28 +65,33 @@
           color: #5b21b6;
         }
 
-        /* Slide-out Sidebar on Mobile */
+        /* HIDE SIDEBAR OFF-SCREEN ON MOBILE BY DEFAULT */
+        .app-sidebar,
         .sidebar, 
         aside, 
         [class*="sidebar"] {
-          position: fixed;
-          left: -100%; 
-          top: 0;
-          bottom: 0;
-          width: 250px;
-          z-index: 1000;
-          transition: left 0.3s ease-in-out;
-          background-color: #f3e8ff;
-          box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+          position: fixed !important;
+          left: -100% !important; 
+          top: 0 !important;
+          bottom: 0 !important;
+          width: 260px !important;
+          z-index: 1000 !important;
+          transition: left 0.3s ease-in-out !important;
+          background-color: #fcf4f9 !important;
+          box-shadow: 2px 0 10px rgba(0,0,0,0.15) !important;
+          overflow-y: auto !important;
         }
 
+        /* Slide sidebar IN when 'active' class is toggled */
+        .app-sidebar.active,
         .sidebar.active, 
         aside.active, 
         [class*="sidebar"].active {
           left: 0 !important;
         }
 
-        /* Full Width Main Content */
+        /* Expand main content container to 100% full screen width */
+        .app-main,
         .main-content, 
         main, 
         .content {
@@ -79,7 +100,7 @@
           padding: 12px !important;
         }
 
-        /* Bottom Fixed Navigation Bar */
+        /* Bottom App Bar */
         .mobile-bottom-nav {
           display: flex;
           justify-content: space-around;
@@ -123,20 +144,20 @@
 
 <body style="background-color: #fcf4f9; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
 
-    <!-- 1. Top Header with Toggle Button (Shows on Mobile) -->
+    <!-- Top Mobile Bar with Menu Toggle Button -->
     <div class="mobile-header">
         <button id="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
         <span class="mobile-logo">Hangarin</span>
     </div>
 
-    <!-- 2. Main Page Content Block -->
+    <!-- Main Content Container -->
     {% block content %}
     {% endblock %}
 
-    <!-- 3. Bottom Mobile Navigation Bar (Authenticated Users Only) -->
+    <!-- Bottom Mobile Navigation Bar for Authenticated Users -->
     {% if user.is_authenticated %}
     <div class="mobile-bottom-nav">
-        <a href="/dashboard/" class="nav-item">
+        <a href="/" class="nav-item">
             <span class="nav-icon">📊</span>
             <span class="nav-label">Dashboard</span>
         </a>
@@ -153,7 +174,11 @@
 
     <script>
         function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar') || document.querySelector('aside') || document.querySelector('[class*="sidebar"]');
+            // Locates the sidebar element and toggles its active visible state
+            const sidebar = document.querySelector('.app-sidebar') || 
+                            document.querySelector('.sidebar') || 
+                            document.querySelector('aside') || 
+                            document.querySelector('[class*="sidebar"]');
             if (sidebar) {
                 sidebar.classList.toggle('active');
             }
