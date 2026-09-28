@@ -7,60 +7,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hangarin</title>
 
-    <style>
-  .mobile-bottom-nav {
+<style>
+  .mobile-header {
     display: none;
   }
 
   @media (max-width: 768px) {
-    body {
-      padding-bottom: 70px;
-    }
-
-    .mobile-bottom-nav {
+    .mobile-header {
       display: flex;
-      justify-content: space-around;
       align-items: center;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background-color: #ffffff;
-      border-top: 1px solid #e5e7eb;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
-      z-index: 1000;
+      gap: 12px;
+      padding: 10px 16px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 1001;
     }
 
-    .mobile-bottom-nav .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #4b5563;
-      text-decoration: none;
-      font-size: 11px;
-      font-weight: 500;
-      width: 100%;
-      height: 100%;
+    .mobile-header button {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .mobile-bottom-nav .nav-item:hover,
-    .mobile-bottom-nav .nav-item.active {
-      color: #4f46e5;
-    }
-
-    .mobile-bottom-nav .nav-icon {
+    .mobile-logo {
+      font-weight: bold;
       font-size: 18px;
-      margin-bottom: 2px;
+      color: #5b21b6;
+    }
+
+    .sidebar, 
+    aside, 
+    [class*="sidebar"] {
+      position: fixed;
+      left: -100%; 
+      top: 0;
+      bottom: 0;
+      width: 250px;
+      z-index: 1000;
+      transition: left 0.3s ease-in-out;
+      background-color: #f3e8ff;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+    }
+
+    .sidebar.active, 
+    aside.active, 
+    [class*="sidebar"].active {
+      left: 0 !important;
+    }
+
+    .main-content, 
+    main, 
+    .content {
+      width: 100% !important;
+      margin-left: 0 !important;
+      padding: 12px !important;
     }
   }
-    </style>
+</style>
     </head>
-    <body style="background-color: #fcf4f9; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+
+    <body>
+         style="background-color: #fcf4f9; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
         {% block content %}
         {% endblock %}
-
+    
+    <div class="mobile-header">
+    <button id="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
+    <span class="mobile-logo">Hangarin</span>
+    </div>
+    
     <!-- Navigation Bar -->
     <div class="mobile-bottom-nav">
     <a href="{% url 'dashboard' %}" class="nav-item">
@@ -80,5 +101,13 @@
         <span class="nav-label">Logout</span>
     </a>
 </div>
+<script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar') || document.querySelector('aside') || document.querySelector('[class*="sidebar"]');
+        if (sidebar) {
+        sidebar.classList.toggle('active');
+        }
+    }
+</script>
 </body>
 </html>
