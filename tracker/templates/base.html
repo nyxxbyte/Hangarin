@@ -82,25 +82,24 @@
     <span class="mobile-logo">Hangarin</span>
     </div>
     
-    <!-- Navigation Bar -->
+    {% if user.is_authenticated %}
     <div class="mobile-bottom-nav">
-    <a href="{% url 'dashboard' %}" class="nav-item">
+    <a href="/dashboard/" class="nav-item">
         <span class="nav-icon">📊</span>
         <span class="nav-label">Dashboard</span>
     </a>
-    <a href="{% url 'task_list' %}" class="nav-item">
+    <a href="/" class="nav-item">
         <span class="nav-icon">📋</span>
-        <span class="nav-label">Tasks</span>
-    </a>
-    <a href="{% url 'task_create' %}" class="nav-item">
-        <span class="nav-icon">➕</span>
-        <span class="nav-label">Add Task</span>
+        <span class="nav-label">Checklist</span>
     </a>
     <a href="{% url 'account_logout' %}" class="nav-item">
+        
         <span class="nav-icon">🚪</span>
         <span class="nav-label">Logout</span>
     </a>
-</div>
+    </div>
+    {% endif %}
+
 <script>
     function toggleSidebar() {
         const sidebar = document.querySelector('.sidebar') || document.querySelector('aside') || document.querySelector('[class*="sidebar"]');
