@@ -3,6 +3,9 @@
 {% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
+<button class="mobile-menu-btn" onclick="toggleSidebar()">
+  ☰ Menu
+</button>
 <head>
     {% load pwa %}
     {% progressive_web_app_meta %}
@@ -22,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* --- Sidebar Navigation --- */
         .sidebar {
             width: 250px;
             background: rgba(255, 255, 255, 0.45);
@@ -46,12 +48,10 @@
             color: #4c1d95; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
-        /* --- Main Content --- */
         .main-content { flex: 1; padding: 40px; overflow-y: auto; }
         .header-container { margin-bottom: 25px; }
         .header-title { font-size: 2em; font-weight: bold; }
 
-        /* --- Input Cards & Forms --- */
         .form-card {
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
@@ -77,7 +77,6 @@
             cursor: pointer; text-decoration: none; display: inline-block;
         }
 
-        /* --- Dashboard Grid --- */
         .task-board, .grid-board {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px;
         }
@@ -88,7 +87,6 @@
             border: 1px solid rgba(255, 255, 255, 0.7);
         }
 
-        /* --- Subtask Items --- */
         .subtasks-section { border-top: 1px solid rgba(124, 58, 237, 0.15); padding-top: 15px; }
         .subtask-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
         .subtask-item {
@@ -107,56 +105,61 @@
             background: #f3e8ff; color: #6b21a8; font-weight: 600;
         }
 
-        /* --- Progress Bar for Goals --- */
         .progress-bar-bg {
             background: rgba(124, 58, 237, 0.15); height: 10px; border-radius: 10px;
             overflow: hidden; margin: 10px 0;
         }
         .progress-bar-fill { background: #7c3aed; height: 100%; border-radius: 10px; }
 
-        
-    @media (max-width: 768px) {
+        .mobile-menu-btn {
+        display: none;
+        }
 
-    .dashboard-container, 
-    .layout-wrapper, 
-    div[style*="display: flex"] {
-        flex-direction: column !important;
-    }
+        @media (max-width: 768px) {
+        .mobile-menu-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            z-index: 10001;
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+            cursor: pointer;
+        }
 
-    .sidebar, 
-    aside, 
-    .left-panel,
-    div[style*="width: 250px"],
-    div[style*="width: 260px"] {
-        position: fixed !important;
-        left: -100% !important;
-        top: 0 !important;
-        bottom: 0 !important;
-        width: 280px !important;
-        z-index: 9999 !important;
-        background-color: #fcf4f9 !important;
-        transition: left 0.3s ease-in-out !important;
-        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15) !important;
-    }
+        .sidebar, aside, .left-panel, div[style*="width: 250px"], div[style*="width: 260px"] {
+            position: fixed !important;
+            left: -100% !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            width: 280px !important;
+            z-index: 10000 !important;
+            background-color: #fcf4f9 !important;
+            transition: left 0.3s ease-in-out !important;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2) !important;
+            padding-top: 60px !important; /* Space for the floating button */
+            overflow-y: auto !important;
+        }
 
-    .sidebar.active, 
-    aside.active, 
-    .left-panel.active,
-    div[style*="width: 250px"].active,
-    div[style*="width: 260px"].active {
-        left: 0 !important;
-    }
+        .sidebar.active, aside.active, .left-panel.active, 
+        div[style*="width: 250px"].active, div[style*="width: 260px"].active {
+            left: 0 !important;
+        }
 
-    .main-content, 
-    .checklist-container, 
-    .right-panel,
-    main {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin-left: 0 !important;
-        padding: 10px !important;
-    }
-    }
+        .main-content, .checklist-container, .right-panel, main {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-left: 0 !important;
+            padding: 10px !important;
+        }
+        }
     </style>
 </head>
 <body>
@@ -344,6 +347,19 @@
                 .catch(err => console.log('Service Worker registration failed:', err));
         });
     }
+</script>
+<script>
+  function toggleSidebar() {
+    // Locates the sidebar element by common classes/inline styles and toggles it
+    const sidebar = document.querySelector('.sidebar') || 
+                    document.querySelector('aside') || 
+                    document.querySelector('.left-panel') ||
+                    document.querySelector('div[style*="width: 250px"]') ||
+                    document.querySelector('div[style*="width: 260px"]');
+    if (sidebar) {
+      sidebar.classList.toggle('active');
+    }
+  }
 </script>
 </body>
 </html>
