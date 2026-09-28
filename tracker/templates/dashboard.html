@@ -113,15 +113,57 @@
             overflow: hidden; margin: 10px 0;
         }
         .progress-bar-fill { background: #7c3aed; height: 100%; border-radius: 10px; }
+
+        
+    @media (max-width: 768px) {
+
+    .dashboard-container, 
+    .layout-wrapper, 
+    div[style*="display: flex"] {
+        flex-direction: column !important;
+    }
+
+    .sidebar, 
+    aside, 
+    .left-panel,
+    div[style*="width: 250px"],
+    div[style*="width: 260px"] {
+        position: fixed !important;
+        left: -100% !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        width: 280px !important;
+        z-index: 9999 !important;
+        background-color: #fcf4f9 !important;
+        transition: left 0.3s ease-in-out !important;
+        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .sidebar.active, 
+    aside.active, 
+    .left-panel.active,
+    div[style*="width: 250px"].active,
+    div[style*="width: 260px"].active {
+        left: 0 !important;
+    }
+
+    .main-content, 
+    .checklist-container, 
+    .right-panel,
+    main {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        padding: 10px !important;
+    }
+    }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div class="sidebar-brand">☁️ Hangarin</div>
 
-        <!-- User Authentication Section -->
         <div style="margin-bottom: 15px;">
             {% if user.is_authenticated %}
                 <p style="font-size: 0.85em; font-weight: 600;">Welcome, {{ user.first_name|default:user.username }}! ✨</p>

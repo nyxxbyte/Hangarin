@@ -181,17 +181,14 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_APP_ICONS = [
     {
-        'src': '/static/images/icon.png', 
+        'src': '/static/images/icon.png',
         'sizes': '160x160'
-    },
-    {
-        'src': 'https://cdn-icons-png.flaticon.com/512/3237/3237472.png',
-        'sizes': '192x192'
-    },
-    {
-        'src': 'https://cdn-icons-png.flaticon.com/512/3237/3237472.png',
-        'sizes': '512x512'
     }
 ]
-
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static', 'serviceworker.js')
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': '/static/images/icon.png',
+        'sizes': '160x160'
+    }
+]
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'tracker/static/serviceworker.js')
