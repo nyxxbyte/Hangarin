@@ -191,4 +191,4 @@ PWA_APP_ICONS_APPLE = [
         'sizes': '160x160'
     }
 ]
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'tracker/static/serviceworker.js')
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static', 'serviceworker.js')
