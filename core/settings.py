@@ -181,14 +181,14 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_APP_ICONS = [
     {
-        'src': '/static/images/icon.png',
-        'sizes': '160x160'
+        'src': '/static/images/icon-192x192.png',
+        'sizes': '192x192'
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
-        'src': '/static/images/icon.png',
-        'sizes': '160x160'
+        'src': '/static/images/icon-512x512.png',
+        'sizes': '512x512'
     }
 ]
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static', 'serviceworker.js')
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'tracker', 'static', 'serviceworker.js')
