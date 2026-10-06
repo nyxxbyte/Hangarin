@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task, SubTask, Note, Goal
+from django.contrib.auth.decorators import login_required
 
+@login_required
+def dashboard(request): # or index(request) depending on your view name
+    ...
+    
 DEFAULT_PILLARS = [
     {
         'title': 'Academic Arc',

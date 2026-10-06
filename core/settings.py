@@ -194,3 +194,7 @@ PWA_APP_ICONS_APPLE = [
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'tracker', 'static', 'serviceworker.js')
 # Bypass django-allauth intermediate confirmation page on social login
 SOCIALACCOUNT_LOGIN_ON_GET = True
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'

@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 {% load pwa %}
 <head>
     {% progressive_web_app_meta %} 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hangarin</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>{% block title %}Hangarin{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'images/icon.png' %}">
 
     <style>
       /* Hide mobile navigation controls on desktop screens */
       .mobile-header,
-      .mobile-bottom-nav {
+      .mobile-bottom-nav,
+      .sidebar-overlay {
         display: none;
       }
 
@@ -40,29 +44,50 @@
         .mobile-header {
           display: flex;
           align-items: center;
-          gap: 12px;
+          justify-content: space-between;
           padding: 12px 16px;
           background: #ffffff;
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid #ebd4ef;
           position: sticky;
           top: 0;
           z-index: 1001;
         }
 
         .mobile-header button {
-          background: #7c3aed;
+          background: #673ab7;
           color: white;
           border: none;
           padding: 8px 14px;
-          border-radius: 8px;
-          font-weight: bold;
+          border-radius: 10px;
+          font-weight: 600;
           cursor: pointer;
+          font-size: 14px;
         }
 
         .mobile-logo {
-          font-weight: bold;
+          font-weight: 800;
           font-size: 18px;
-          color: #5b21b6;
+          color: #4a154b;
+        }
+
+        /* Dim Backdrop Overlay when Sidebar is open on Mobile */
+        .sidebar-overlay {
+          display: block;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(74, 21, 75, 0.3);
+          z-index: 999;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+          opacity: 1;
+          visibility: visible;
         }
 
         /* HIDE SIDEBAR OFF-SCREEN ON MOBILE BY DEFAULT */
@@ -77,8 +102,8 @@
           width: 260px !important;
           z-index: 1000 !important;
           transition: left 0.3s ease-in-out !important;
-          background-color: #fcf4f9 !important;
-          box-shadow: 2px 0 10px rgba(0,0,0,0.15) !important;
+          background-color: #ffffff !important;
+          box-shadow: 2px 0 15px rgba(74, 21, 75, 0.12) !important;
           overflow-y: auto !important;
         }
 
@@ -111,8 +136,8 @@
           right: 0;
           height: 60px;
           background-color: #ffffff;
-          border-top: 1px solid #e5e7eb;
-          box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+          border-top: 1px solid #ebd4ef;
+          box-shadow: 0 -2px 10px rgba(74, 21, 75, 0.06);
           z-index: 1000;
         }
 
@@ -121,17 +146,17 @@
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          color: #4b5563;
+          color: #7b5282;
           text-decoration: none;
           font-size: 11px;
-          font-weight: 500;
+          font-weight: 600;
           width: 100%;
           height: 100%;
         }
 
         .mobile-bottom-nav .nav-item:hover,
         .mobile-bottom-nav .nav-item.active {
-          color: #7c3aed;
+          color: #673ab7;
         }
 
         .mobile-bottom-nav .nav-icon {
@@ -140,15 +165,21 @@
         }
       }
     </style>
+    {% block extra_head %}{% endblock %}
 </head>
 
-<body style="background-color: #fcf4f9; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
+<body style="background-color: #fcf4f9; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
 
+    {% if user.is_authenticated %}
     <!-- Top Mobile Bar with Menu Toggle Button -->
     <div class="mobile-header">
         <button id="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
-        <span class="mobile-logo">Hangarin</span>
+        <span class="mobile-logo">☁️ Hangarin</span>
     </div>
+
+    <!-- Mobile Backdrop Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    {% endif %}
 
     <!-- Main Content Container -->
     {% block content %}
@@ -174,15 +205,20 @@
 
     <script>
         function toggleSidebar() {
-            // Locates the sidebar element and toggles its active visible state
             const sidebar = document.querySelector('.app-sidebar') || 
                             document.querySelector('.sidebar') || 
                             document.querySelector('aside') || 
                             document.querySelector('[class*="sidebar"]');
+            const overlay = document.getElementById('sidebar-overlay');
+
             if (sidebar) {
                 sidebar.classList.toggle('active');
             }
+            if (overlay) {
+                overlay.classList.toggle('active');
+            }
         }
     </script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
