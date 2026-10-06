@@ -167,12 +167,6 @@
                 <p style="font-size: 0.85em; font-weight: 600;">Welcome, {{ user.first_name|default:user.username }}! ✨</p>
                 <a href="{% url 'account_logout' %}" style="font-size: 0.8em; color: #ef4444; text-decoration: none; font-weight: bold;">Logout</a>
             {% else %}
-                <a href="{% provider_login_url 'google' %}" class="btn-google">
-                Sign in with Google
-                </a>
-               <a href="{% provider_login_url 'github' %}" class="btn-github">
-                Sign in with GitHub
-                </a>
             {% endif %}
         </div>
 
