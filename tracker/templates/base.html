@@ -246,6 +246,49 @@
           font-size: 18px;
           margin-bottom: 2px;
         }
+        .sidebar-user-card {
+    background: #ffffff;
+    border: 1px solid #ebd4ef;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.05);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.user-greeting {
+    font-size: 13px;
+    font-weight: 700;
+    color: #4a154b;
+}
+
+.auth-btn {
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.login-btn {
+    background-color: #7c3aed;
+    color: #ffffff !important;
+    display: block;
+    width: 100%;
+}
+
+.logout-btn {
+    color: #7c3aed;
+    background-color: #f3e8ff;
+}
+
       }
     </style>
     {% block extra_head %}{% endblock %}
@@ -267,16 +310,17 @@
         <aside class="app-sidebar" id="app-sidebar">
             <a href="/" class="brand-title">☁️ Hangarin</a>
 
-            <!-- Clean Authenticated User Card (Replaces raw login text links) -->
-            <div class="sidebar-user-card">
-                {% if user.is_authenticated %}
-                    <span class="sidebar-user-name">👋 {{ user.username }}</span>
-                    <a href="{% url 'account_logout' %}" class="sidebar-auth-btn">Log out</a>
-                {% else %}
-                    <span class="sidebar-user-name">Guest</span>
-                    <a href="{% url 'account_login' %}" class="sidebar-auth-btn">Sign In</a>
-                {% endif %}
-            </div>
+            <!-- STYLED ACCOUNT CARD -->
+<div class="sidebar-user-card">
+    {% if user.is_authenticated %}
+        <div class="user-info">
+            <span class="user-greeting">👋 {{ user.username }}</span>
+            <a href="{% url 'account_logout' %}" class="auth-btn logout-btn">Log Out</a>
+        </div>
+    {% else %}
+        <a href="{% url 'account_login' %}" class="auth-btn login-btn">🔑 Sign In</a>
+    {% endif %}
+</div>
 
             <!-- Navigation Menu -->
             <nav class="sidebar-nav">
