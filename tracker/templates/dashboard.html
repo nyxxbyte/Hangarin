@@ -4,7 +4,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% progressive_web_app_meta %}
+        {% load static %}
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/icon.png' %}">
+    <meta name="theme-color" content="#7c3aed">
+    <link rel="icon" type="image/png" href="{% static 'images/icon.png' %}">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>✨ Hangarin: My Daily Checklist ✨</title>
@@ -348,20 +353,20 @@
     </div>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register("{% static 'serviceworker.js' %}")
-                    .then(reg => console.log('PWA Service Worker registered:', reg.scope))
-                    .catch(err => console.log('Service Worker registration failed:', err));
-            });
-        }
-
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
             if (sidebar) {
                 sidebar.classList.toggle('active');
             }
         }
+    </script>
+
+<script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register("/serviceworker.js")
+          .then(reg => console.log('Service Worker Registered!', reg.scope))
+          .catch(err => console.error('Service Worker Registration Failed!', err));
+      }
     </script>
 </body>
 </html>

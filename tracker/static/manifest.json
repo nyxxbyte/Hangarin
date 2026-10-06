@@ -1,17 +1,25 @@
 {
-  "name": "Hangarin",
+  "name": "Hangarin: Daily Checklist",
   "short_name": "Hangarin",
+  "description": "Daily checklist, notes, and vision tracker",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#e9d5ff",
+  "background_color": "#fbcfe8",
   "theme_color": "#7c3aed",
-  "description": "Your ultimate life organizer and habit tracker",
-  "icons": [
-    {
-      "src": "/static/images/icon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
+  "orientation": "portrait",
+"icons": [
+  {
+    "src": "/static/images/icon.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "/static/images/icon.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "maskable"
+  }
+]
 }

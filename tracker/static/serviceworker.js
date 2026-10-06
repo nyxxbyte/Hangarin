@@ -1,28 +1,49 @@
-var staticCacheName = 'hangarin-pwa-v1';
+const CACHE_NAME = 'hangarin-v2';
+const ASSETS_TO_CACHE = [
+  '/static/manifest.json',
+  '/static/images/icon.png'
+];
 
-self.addEventListener('install', function(event) {
-    self.skipWaiting();
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(async (cache) => {
+      console.log('[Service Worker] Caching assets...');
+      for (const asset of ASSETS_TO_CACHE) {
+        try {
+          await cache.add(asset);
+        } catch (err) {
+          console.warn('[Service Worker] Could not cache asset:', asset, err);
+        }
+      }
+    }).then(() => self.skipWaiting())
+  );
 });
 
-self.addEventListener('activate', function(event) {
-    event.waitUntil(clients.claim());
-});
-
-self.addEventListener('fetch', function(event) {
-    // For HTML page navigation, ALWAYS fetch live updates from Django first
-    if (event.request.mode === 'navigate') {
-        event.respondWith(
-            fetch(event.request).catch(function() {
-                return caches.match(event.request);
-            })
-        );
-        return;
-    }
-
-    // For static files (images, CSS, JS), check cache first
-    event.respondWith(
-        caches.match(event.request).then(function(response) {
-            return response || fetch(event.request);
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
+          }
         })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  const request = event.request;
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request).catch(() => caches.match(request))
     );
+    return;
+  }
+  event.respondWith(
+    caches.match(request).then((cachedResponse) => {
+      return cachedResponse || fetch(request);
+    })
+  );
 });
