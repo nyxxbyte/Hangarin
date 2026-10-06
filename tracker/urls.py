@@ -27,4 +27,7 @@ urlpatterns = [
     # Control Center Actions
     path('clear-completed/', views.clear_completed_tasks, name='clear_completed'),
     path('reset-data/', views.reset_all_data, name='reset_data'),
+
+   path('note/<int:note_id>/update/', views.update_note, name='update_note'),
+path('goal/<int:goal_id>/update/', views.update_goal, name='update_goal'),
 ]

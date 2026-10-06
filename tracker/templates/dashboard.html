@@ -311,7 +311,7 @@
                 {% endfor %}
             </div>
 
-        <!-- LORE DUMP TAB (NOTES) -->
+<!-- LORE DUMP TAB (NOTES) -->
         {% elif active_tab == 'notes' %}
             <div class="header-container" style="display: flex; align-items: center; gap: 15px;">
                 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰ Menu</button>
@@ -330,17 +330,48 @@
             <div class="grid-board">
                 {% for note in notes %}
                 <div class="content-card">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
-                        <h3 style="font-size: 1.1em; color: #3b0764;">{{ note.title }}</h3>
-                        <a href="{% url 'delete_note' note.id %}" style="text-decoration: none; color: #991b1b; font-weight: bold;">×</a>
+                    <!-- DISPLAY MODE -->
+                    <div id="note-display-{{ note.id }}">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <h3 style="font-size: 1.1em; color: #3b0764;">{{ note.title }}</h3>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <button type="button" onclick="toggleNoteEdit('{{ note.id }}')" style="background: none; border: none; color: #7c3aed; cursor: pointer; font-size: 0.85em; font-weight: bold;">✏️ Edit</button>
+                                <a href="{% url 'delete_note' note.id %}" style="text-decoration: none; color: #991b1b; font-weight: bold;">×</a>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9em; white-space: pre-line; line-height: 1.5; margin-bottom: 12px;">{{ note.content }}</p>
+                        <span style="font-size: 0.75em; opacity: 0.6;">Posted {{ note.created_at|date:"M d, Y h:i A" }}</span>
                     </div>
-                    <p style="font-size: 0.9em; white-space: pre-line; line-height: 1.5; margin-bottom: 12px;">{{ note.content }}</p>
-                    <span style="font-size: 0.75em; opacity: 0.6;">Posted {{ note.created_at|date:"M d, Y h:i A" }}</span>
+
+                    <!-- EDIT MODE (HIDDEN UNTIL EDIT CLICKED) -->
+                    <form id="note-edit-{{ note.id }}" action="{% url 'update_note' note.id %}" method="POST" style="display: none; flex-direction: column; gap: 8px;">
+                        {% csrf_token %}
+                        <input type="text" name="title" value="{{ note.title }}" class="input-field" required>
+                        <textarea name="content" class="textarea-field" rows="3" required>{{ note.content }}</textarea>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="submit" class="btn-primary" style="padding: 4px 10px; font-size: 0.85em;">Save</button>
+                            <button type="button" onclick="toggleNoteEdit('{{ note.id }}')" style="background: #e5e7eb; border: none; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.85em;">Cancel</button>
+                        </div>
+                    </form>
                 </div>
                 {% empty %}
                 <p style="opacity: 0.6;">No notes saved yet. Write your first entry above!</p>
                 {% endfor %}
             </div>
+
+            <script>
+            function toggleNoteEdit(id) {
+                const displayBox = document.getElementById(`note-display-${id}`);
+                const editForm = document.getElementById(`note-edit-${id}`);
+                if (displayBox.style.display === 'none') {
+                    displayBox.style.display = 'block';
+                    editForm.style.display = 'none';
+                } else {
+                    displayBox.style.display = 'none';
+                    editForm.style.display = 'flex';
+                }
+            }
+            </script>
 
         <!-- THE VISION TAB (GOALS) -->
         {% elif active_tab == 'goals' %}
@@ -366,13 +397,22 @@
                         <h3 style="font-size: 1.1em; color: #3b0764;">{{ goal.title }}</h3>
                         <a href="{% url 'delete_goal' goal.id %}" style="text-decoration: none; color: #991b1b; font-weight: bold;">×</a>
                     </div>
-                    <div class="progress-bar-bg">
+                    <div class="progress-bar-bg" style="margin: 10px 0 8px 0;">
                         <div class="progress-bar-fill" style="width: {{ goal.progress }}%;"></div>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.8em; opacity: 0.8;">
                         <span>Progress: {{ goal.progress }}%</span>
                         {% if goal.target_date %}<span>Target: {{ goal.target_date|date:"Y-m-d" }}</span>{% endif %}
                     </div>
+
+                    <!-- UPDATE PROGRESS INLINE FORM -->
+                    <form action="{% url 'update_goal' goal.id %}" method="POST" style="display: flex; gap: 6px; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #ebd4ef;">
+                        {% csrf_token %}
+                        <span style="font-size: 0.8em; font-weight: 600; color: #4a154b;">New Progress:</span>
+                        <input type="number" name="progress" min="0" max="100" value="{{ goal.progress }}" class="input-field" style="width: 60px; padding: 4px 6px; font-size: 0.85em; text-align: center;">
+                        <span style="font-size: 0.8em;">%</span>
+                        <button type="submit" class="btn-primary" style="padding: 4px 10px; font-size: 0.8em;">Update</button>
+                    </form>
                 </div>
                 {% empty %}
                 <p style="opacity: 0.6;">No long-term goals set yet. Add one above!</p>

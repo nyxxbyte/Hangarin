@@ -1,6 +1,26 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task, SubTask, Note, Goal
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Note, Goal  # Adjust if model names differ
+
+def update_note(request, note_id):
+    if request.method == 'POST':
+        note = get_object_or_404(Note, id=note_id, user=request.user)
+        note.title = request.POST.get('title', note.title)
+        note.content = request.POST.get('content', note.content)
+        note.save()
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+def update_goal(request, goal_id):
+    if request.method == 'POST':
+        goal = get_object_or_404(Goal, id=goal_id, user=request.user)
+        new_progress = request.POST.get('progress')
+        if new_progress is not None:
+            goal.progress = int(new_progress)
+            goal.save()
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def dashboard(request):
