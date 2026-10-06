@@ -1,16 +1,19 @@
-// Basic Service Worker for Django PWA
-const CACHE_NAME = 'hangarin-pwa-v1';
+var staticCacheName = 'hangarin-pwa-v1';
 
-self.addEventListener('install', (event) => {
-  self.skipWaiting();
+self.addEventListener('install', function(event) {
+    event.waitUntil(
+        caches.open(staticCacheName).then(function(cache) {
+            return cache.addAll([
+                '/',
+            ]);
+        })
+    );
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
-});
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
-  );
+self.addEventListener('fetch', function(event) {
+    event.respondWith(
+        caches.match(event.request).then(function(response) {
+            return response || fetch(event.request);
+        })
+    );
 });
