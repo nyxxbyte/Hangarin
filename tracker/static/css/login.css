@@ -10,21 +10,20 @@ body.auth-body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle at center, #1b3a2b 0%, #0c1812 100%);
-    color: #e2e8f0;
+    background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #ebd4ef 100%);
+    color: #4a154b;
     padding: 1.5rem;
 }
 
-/* Modal Card */
+/* Hangarin Pink & Purple Card */
 .auth-card {
-    background: rgba(22, 33, 27, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid #ebd4ef;
+    border-radius: 24px;
     padding: 2.5rem 2rem;
     width: 100%;
     max-width: 420px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 15px 35px rgba(103, 58, 183, 0.12);
 }
 
 /* Header */
@@ -34,20 +33,20 @@ body.auth-body {
 }
 
 .auth-logo {
-    font-size: 2.2rem;
-    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .auth-header h2 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 0.3rem;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #4a154b;
+    margin-bottom: 0.2rem;
 }
 
 .auth-header p {
     font-size: 0.9rem;
-    color: #a0aec0;
+    color: #7b5282;
 }
 
 /* Social Buttons */
@@ -65,19 +64,31 @@ body.auth-body {
     gap: 0.75rem;
     width: 100%;
     padding: 0.75rem 1rem;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #ffffff;
+    border-radius: 14px;
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
-.btn-social:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.25);
+.btn-google {
+    background: #673ab7;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-google:hover {
+    background: #5e35b1;
+}
+
+.btn-github {
+    background: #212529;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-github:hover {
+    background: #000000;
 }
 
 .social-icon {
@@ -96,13 +107,13 @@ body.auth-body {
 .divider::before, .divider::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid #ebd4ef;
 }
 
 .divider span {
     padding: 0 0.8rem;
     font-size: 0.8rem;
-    color: #718096;
+    color: #9c78a3;
 }
 
 /* Form Styling */
@@ -120,29 +131,29 @@ body.auth-body {
 
 .form-group label {
     font-size: 0.85rem;
-    color: #cbd5e0;
-    font-weight: 500;
+    color: #4a154b;
+    font-weight: 600;
 }
 
 .form-group input {
     width: 100%;
-    padding: 0.8rem 1rem;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #ffffff;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    background: #fbf7fc;
+    border: 1px solid #ebd4ef;
+    color: #4a154b;
     font-size: 0.95rem;
     outline: none;
     transition: border-color 0.2s ease;
 }
 
 .form-group input:focus {
-    border-color: #68d391;
-    box-shadow: 0 0 0 2px rgba(104, 211, 145, 0.2);
+    border-color: #7c4dff;
+    box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.15);
 }
 
 .form-group input::placeholder {
-    color: #4a5568;
+    color: #bfa8c4;
 }
 
 /* Options Row */
@@ -157,19 +168,20 @@ body.auth-body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #a0aec0;
+    color: #7b5282;
     cursor: pointer;
 }
 
 .remember-me input[type="checkbox"] {
-    accent-color: #48bb78;
+    accent-color: #673ab7;
     width: 15px;
     height: 15px;
 }
 
 .forgot-link {
-    color: #68d391;
+    color: #673ab7;
     text-decoration: none;
+    font-weight: 600;
 }
 
 .forgot-link:hover {
@@ -180,10 +192,10 @@ body.auth-body {
 .btn-submit {
     width: 100%;
     padding: 0.85rem;
-    border-radius: 25px;
-    background: #68d391;
+    border-radius: 14px;
+    background: #7c4dff;
     border: none;
-    color: #0f291e;
+    color: #ffffff;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
@@ -192,7 +204,7 @@ body.auth-body {
 }
 
 .btn-submit:hover {
-    background: #51b87a;
+    background: #651fff;
 }
 
 .btn-submit:active {
@@ -204,13 +216,13 @@ body.auth-body {
     text-align: center;
     margin-top: 1.8rem;
     font-size: 0.85rem;
-    color: #a0aec0;
+    color: #7b5282;
 }
 
 .auth-footer a {
-    color: #68d391;
+    color: #673ab7;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
     margin-left: 0.3rem;
 }
 
