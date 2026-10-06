@@ -23,11 +23,8 @@ class Task(models.Model):
 class SubTask(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    is_completed = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False) 
     due_date = models.DateField(null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.title} ({'Done' if self.is_completed else 'Pending'})"
 
 class Note(models.Model):
     title = models.CharField(max_length=200)

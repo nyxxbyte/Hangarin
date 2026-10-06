@@ -3,17 +3,11 @@
 {% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
-<button class="mobile-menu-btn" onclick="toggleSidebar()">
-  ☰ Menu
-</button>
 <head>
-    {% load pwa %}
     {% progressive_web_app_meta %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>✨ Hangarin: My Daily Checklist ✨</title>
-
-    {% progressive_web_app_meta %}
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -98,8 +92,9 @@
             text-decoration: none; width: 22px; height: 22px; border-radius: 6px;
             background: white; display: inline-flex; align-items: center; justify-content: center;
             font-size: 0.85em; font-weight: bold; color: #4c1d95; border: 1px solid rgba(124, 58, 237, 0.3);
+            flex-shrink: 0;
         }
-        .completed-text { text-decoration: line-through; opacity: 0.55; }
+        .completed-text { text-decoration: line-through !important; opacity: 0.55 !important; }
         .due-badge {
             font-size: 0.75em; padding: 3px 8px; border-radius: 8px;
             background: #f3e8ff; color: #6b21a8; font-weight: 600;
@@ -112,53 +107,48 @@
         .progress-bar-fill { background: #7c3aed; height: 100%; border-radius: 10px; }
 
         .mobile-menu-btn {
-        display: none;
+            display: none;
         }
 
         @media (max-width: 768px) {
-        .mobile-menu-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            top: 12px;
-            left: 12px;
-            z-index: 10001;
-            background: #7c3aed;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
-            cursor: pointer;
-        }
+            .mobile-menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #7c3aed;
+                color: white;
+                border: none;
+                padding: 8px 14px;
+                border-radius: 20px;
+                font-weight: bold;
+                box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+                cursor: pointer;
+            }
 
-        .sidebar, aside, .left-panel, div[style*="width: 250px"], div[style*="width: 260px"] {
-            position: fixed !important;
-            left: -100% !important;
-            top: 0 !important;
-            bottom: 0 !important;
-            width: 280px !important;
-            z-index: 10000 !important;
-            background-color: #fcf4f9 !important;
-            transition: left 0.3s ease-in-out !important;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2) !important;
-            padding-top: 60px !important; /* Space for the floating button */
-            overflow-y: auto !important;
-        }
+            .sidebar {
+                position: fixed !important;
+                left: -100% !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                width: 280px !important;
+                z-index: 10000 !important;
+                background-color: #fcf4f9 !important;
+                transition: left 0.3s ease-in-out !important;
+                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2) !important;
+                padding-top: 30px !important;
+                overflow-y: auto !important;
+            }
 
-        .sidebar.active, aside.active, .left-panel.active, 
-        div[style*="width: 250px"].active, div[style*="width: 260px"].active {
-            left: 0 !important;
-        }
+            .sidebar.active {
+                left: 0 !important;
+            }
 
-        .main-content, .checklist-container, .right-panel, main {
-            width: 100% !important;
-            max-width: 100% !important;
-            margin-left: 0 !important;
-            padding: 10px !important;
-        }
+            .main-content {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin-left: 0 !important;
+                padding: 10px !important;
+            }
         }
     </style>
 </head>
@@ -175,7 +165,7 @@
                 <a href="{% provider_login_url 'google' %}" class="btn-primary" style="display: block; text-align: center; text-decoration: none; font-size: 0.85em;">
                     Sign in with Google
                 </a>
-                <a href="{% provider_login_url 'github' %}" class="btn-primary" style="display: block; text-align: center; text-decoration: none; font-size: 0.85em; background: #24292e;">
+                <a href="{% provider_login_url 'github' %}" class="btn-primary" style="display: block; text-align: center; text-decoration: none; font-size: 0.85em; background: #24292e; margin-top: 6px;">
                     Sign in with GitHub
                 </a>
             {% endif %}
@@ -194,7 +184,10 @@
 
         <!-- DASHBOARD TAB -->
         {% if active_tab == 'dashboard' %}
-            <div class="header-container"><h1 class="header-title">My Daily Checklist ☁️</h1></div>
+            <div class="header-container" style="display: flex; align-items: center; gap: 15px;">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰ Menu</button>
+                <h1 class="header-title">My Daily Checklist ☁️</h1>
+            </div>
 
             <div class="form-card">
                 <form action="{% url 'add_custom_task' %}" method="POST" style="display: flex; gap: 10px;">
@@ -226,22 +219,28 @@
                     </div>
 
                     <div class="subtasks-section">
-                        <ul class="subtask-list">
-                            {% for sub in task.subtask_set.all %}
-                            <li class="subtask-item">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <a href="{% url 'toggle_subtask' sub.id %}" class="check-btn">{% if sub.is_completed %}✓{% endif %}</a>
-                                    <span class="{% if sub.is_completed %}completed-text{% endif %}">{{ sub.title }}</span>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    {% if sub.due_date %}<span class="due-badge">deadline: {{ sub.due_date|date:"Y-m-d" }}</span>{% endif %}
-                                    <a href="{% url 'delete_subtask' sub.id %}" style="text-decoration: none; color: #991b1b; font-weight: bold;">×</a>
-                                </div>
-                            </li>
-                            {% empty %}
-                            <li style="font-size: 0.85em; opacity: 0.6;">No tasks or reminders yet.</li>
-                            {% endfor %}
-                        </ul>
+<ul class="subtask-list">
+    {% for sub in task.subtask_set.all %}
+    <li class="subtask-item">
+        <a href="{% url 'toggle_subtask' sub.id %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="check-btn">{% if sub.is_completed or sub.completed %}✓{% endif %}</span>
+            <span>
+                {% if sub.is_completed or sub.completed %}
+                    <del style="opacity: 0.5;">{{ sub.title }}</del>
+                {% else %}
+                    {{ sub.title }}
+                {% endif %}
+            </span>
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            {% if sub.due_date %}<span class="due-badge">deadline: {{ sub.due_date|date:"Y-m-d" }}</span>{% endif %}
+            <a href="{% url 'delete_subtask' sub.id %}" style="text-decoration: none; color: #991b1b; font-weight: bold;">×</a>
+        </div>
+    </li>
+    {% empty %}
+    <li style="font-size: 0.85em; opacity: 0.6;">No tasks or reminders yet.</li>
+    {% endfor %}
+</ul>
 
                         <form action="{% url 'add_subtask' task.id %}" method="POST" style="display: flex; flex-direction: column; gap: 6px;">
                             {% csrf_token %}
@@ -258,7 +257,10 @@
 
         <!-- LORE DUMP TAB (NOTES) -->
         {% elif active_tab == 'notes' %}
-            <div class="header-container"><h1 class="header-title">📝 Lore Dump</h1></div>
+            <div class="header-container" style="display: flex; align-items: center; gap: 15px;">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰ Menu</button>
+                <h1 class="header-title">📝 Lore Dump</h1>
+            </div>
 
             <div class="form-card">
                 <form action="{% url 'add_note' %}" method="POST" style="display: flex; flex-direction: column; gap: 10px;">
@@ -286,7 +288,10 @@
 
         <!-- THE VISION TAB (GOALS) -->
         {% elif active_tab == 'goals' %}
-            <div class="header-container"><h1 class="header-title">🎯 The Vision</h1></div>
+            <div class="header-container" style="display: flex; align-items: center; gap: 15px;">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰ Menu</button>
+                <h1 class="header-title">🎯 The Vision</h1>
+            </div>
 
             <div class="form-card">
                 <form action="{% url 'add_goal' %}" method="POST" style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -320,7 +325,10 @@
 
         <!-- CONTROL CENTER TAB (SETTINGS) -->
         {% elif active_tab == 'settings' %}
-            <div class="header-container"><h1 class="header-title">⚙️ Control Center</h1></div>
+            <div class="header-container" style="display: flex; align-items: center; gap: 15px;">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰ Menu</button>
+                <h1 class="header-title">⚙️️ Control Center</h1>
+            </div>
 
             <div class="content-card" style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">
                 <div>
@@ -340,26 +348,20 @@
     </div>
 
     <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register("{% static 'serviceworker.js' %}")
-                .then(reg => console.log('PWA Service Worker registered:', reg.scope))
-                .catch(err => console.log('Service Worker registration failed:', err));
-        });
-    }
-</script>
-<script>
-  function toggleSidebar() {
-    // Locates the sidebar element by common classes/inline styles and toggles it
-    const sidebar = document.querySelector('.sidebar') || 
-                    document.querySelector('aside') || 
-                    document.querySelector('.left-panel') ||
-                    document.querySelector('div[style*="width: 250px"]') ||
-                    document.querySelector('div[style*="width: 260px"]');
-    if (sidebar) {
-      sidebar.classList.toggle('active');
-    }
-  }
-</script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register("{% static 'serviceworker.js' %}")
+                    .then(reg => console.log('PWA Service Worker registered:', reg.scope))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('active');
+            }
+        }
+    </script>
 </body>
 </html>

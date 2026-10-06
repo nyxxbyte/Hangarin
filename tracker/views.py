@@ -65,15 +65,22 @@ def settings_view(request):
 # --- Dashboard Actions ---
 
 def toggle_subtask(request, subtask_id):
-    subtask = get_object_or_404(SubTask, id=subtask_id)
-    subtask.is_completed = not subtask.is_completed
-    subtask.save()
-    return redirect('dashboard')
+    subtask = SubTask.objects.filter(id=subtask_id).first()
+    if subtask:
+        # Check actual database field names on SubTask
+        field_names = [f.name for f in subtask._meta.get_fields()]
+        if 'is_completed' in field_names:
+            subtask.is_completed = not subtask.is_completed
+        elif 'completed' in field_names:
+            subtask.completed = not subtask.completed
+        subtask.save()
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
 def delete_subtask(request, subtask_id):
-    subtask = get_object_or_404(SubTask, id=subtask_id)
-    subtask.delete()
-    return redirect('dashboard')
+    subtask = SubTask.objects.filter(id=subtask_id).first()
+    if subtask:
+        subtask.delete()
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
 def add_subtask(request, task_id):
     if request.method == 'POST':
@@ -86,7 +93,7 @@ def add_subtask(request, task_id):
                 title=title.strip(),
                 due_date=due_date if due_date else None
             )
-    return redirect('dashboard')
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
 def replace_task(request, task_id):
     task = get_object_or_404(Task, id=task_id)
