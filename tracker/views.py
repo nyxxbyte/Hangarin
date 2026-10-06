@@ -3,9 +3,10 @@ from .models import Task, SubTask, Note, Goal
 from django.contrib.auth.decorators import login_required
 
 @login_required
-def dashboard(request): # or index(request) depending on your view name
-    ...
-    
+def dashboard(request):
+    # Your existing dashboard logic here
+    return render(request, 'tracker/index.html')
+
 DEFAULT_PILLARS = [
     {
         'title': 'Academic Arc',
