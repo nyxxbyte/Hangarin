@@ -4,32 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Out - Hangarin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fbcfe8 0%, #f3e8ff 50%, #e0e7ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 36px 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.12);
+            border: 1px solid rgba(233, 213, 255, 0.8);
+            text-align: center;
+        }
+
+        .brand-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #4a154b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .auth-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #2e1065;
+            margin-bottom: 6px;
+        }
+
+        .auth-subtitle {
+            font-size: 13px;
+            color: #6b21a8;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: #dc2626;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+            transition: background 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background: #b91c1c;
+        }
+
+        .btn-cancel {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            background: #f3f4f6;
+            color: #4b5563;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: background 0.2s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+    </style>
 </head>
-<body style="background-color: #fcf4f9; margin: 0; font-family: system-ui, -apple-system, sans-serif;">
-    <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
-        <div style="background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(124, 58, 237, 0.1); max-width: 400px; width: 100%; text-align: center; border: 1px solid #f3e8ff;">
-            
-            <div style="font-size: 3rem; margin-bottom: 10px;">👋</div>
-            
-            <h2 style="color: #7c3aed; font-size: 1.8rem; margin-bottom: 8px; font-weight: 700;">Sign Out</h2>
-            <p style="color: #6b7280; font-size: 0.95rem; margin-bottom: 24px;">Are you sure you want to log out of your Hangarin account?</p>
+<body>
 
-            <form method="post" action="{% url 'account_logout' %}">
-                {% csrf_token %}
-                {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-                {% endif %}
+<div class="auth-card">
+    <div class="brand-logo">☁️ Hangarin</div>
+    <h1 class="auth-title">Sign Out</h1>
+    <p class="auth-subtitle">Are you sure you want to sign out of your workspace?</p>
 
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <button type="submit" style="width: 100%; padding: 12px; background: #ef4444; border: none; border-radius: 12px; color: white; font-weight: bold; font-size: 0.95rem; cursor: pointer;">
-                        Yes, Sign Out
-                    </button>
-                    <a href="{% url 'dashboard' %}" style="display: block; width: 100%; padding: 12px; background: #f3e8ff; border-radius: 12px; color: #7c3aed; font-weight: 600; text-decoration: none; font-size: 0.95rem; box-sizing: border-box;">
-                        Cancel & Return
-                    </a>
-                </div>
-            </form>
-        </div>
-    </div>
+    <form method="POST" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-submit">Sign Out</button>
+        <a href="/" class="btn-cancel">Cancel</a>
+    </form>
+</div>
+
 </body>
 </html>

@@ -1,80 +1,301 @@
-{% load static %}
 {% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Back - Hangarin</title>
-    <link rel="icon" type="image/png" href="{% static 'images/icon.png' %}">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <title>Sign In - Hangarin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fbcfe8 0%, #f3e8ff 50%, #e0e7ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            padding: 36px 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.12);
+            border: 1px solid rgba(233, 213, 255, 0.8);
+            text-align: center;
+        }
+
+        .brand-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #4a154b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .auth-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #2e1065;
+            margin-bottom: 6px;
+        }
+
+        .auth-subtitle {
+            font-size: 13px;
+            color: #6b21a8;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+
+        /* MESSAGES ALERT */
+        .alert-message {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        /* SOCIAL BUTTONS */
+        .social-btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 11px 16px;
+            border-radius: 12px;
+            border: 1px solid #ebd4ef;
+            background: #fdfbfd;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .social-btn:hover {
+            background: #f5f3ff;
+            border-color: #c084fc;
+        }
+
+        .social-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* DIVIDER */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 500;
+            margin: 20px 0;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .divider span {
+            padding: 0 10px;
+        }
+
+        /* FORM INPUTS */
+        .form-group {
+            text-align: left;
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #4b5563;
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: #fafafa;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            border-color: #7c3aed;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+        }
+
+        .form-extra {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            margin-bottom: 18px;
+        }
+
+        .form-extra label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #4b5563;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .form-extra a {
+            color: #7c3aed;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .form-extra a:hover {
+            text-decoration: underline;
+        }
+
+        /* PRIMARY SUBMIT BUTTON */
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: #7c3aed;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+            transition: background 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background: #6d28d9;
+        }
+
+        /* FOOTER LINK */
+        .auth-footer {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .auth-footer a {
+            color: #7c3aed;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-<body class="auth-body">
+<body>
 
-    <div class="auth-card">
-        <!-- Logo / Icon -->
-        <div class="auth-header">
-            <div class="auth-logo">☁️</div>
-            <h2>Hangarin</h2>
-            <p>Pick up where your list left off.</p>
-        </div>
+<div class="auth-card">
+    <div class="brand-logo">☁️ Hangarin</div>
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-subtitle">Sign in to access your personal workspace.</p>
 
-        <!-- Social Sign-in Buttons -->
-        <div class="social-buttons">
-            <a href="{% provider_login_url 'google' %}" class="btn-social btn-google">
-                <svg class="social-icon" viewBox="0 0 24 24">
-                    <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.2 9 5 12 5z"/>
-                    <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
-                    <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15s.7 5.3 1.9 7.7l3.7-2.9c-.3-.7-.5-1.4-.5-2.2z"/>
-                    <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.2-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"/>
-                </svg>
-                Continue with Google
-            </a>
-
-            <a href="{% provider_login_url 'github' %}" class="btn-social btn-github">
-                <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                </svg>
-                Continue with GitHub
-            </a>
-        </div>
-
-        <!-- Divider -->
-        <div class="divider">
-            <span>or use your account</span>
-        </div>
-
-        <!-- Login Form -->
-        <form method="POST" action="{% url 'account_login' %}" class="auth-form">
-            {% csrf_token %}
-
-            <div class="form-group">
-                <label for="id_login">Username or email</label>
-                <input type="text" name="login" id="id_login" placeholder="Username or email" required>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-message">
+                {{ message }}
             </div>
+        {% endfor %}
+    {% endif %}
 
-            <div class="form-group">
-                <label for="id_password">Password</label>
-                <input type="password" name="password" id="id_password" placeholder="Your password" required>
-            </div>
-
-            <div class="form-options">
-                <label class="remember-me">
-                    <input type="checkbox" name="remember" id="id_remember">
-                    <span>Keep me logged in</span>
-                </label>
-                <a href="{% url 'account_reset_password' %}" class="forgot-link">Forgot password?</a>
-            </div>
-
-            <button type="submit" class="btn-submit">Log in</button>
-        </form>
-
-        <!-- Footer Link -->
-        <div class="auth-footer">
-            <span>New here?</span>
-            <a href="{% url 'account_signup' %}">Create an account</a>
-        </div>
+    <!-- SOCIAL LOGIN BUTTONS -->
+    <div class="social-btn-container">
+        <a href="{% provider_login_url 'google' %}" class="social-btn">
+            <svg viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.2 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.5s.7 2.8 1.9 5.2l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.2-6.4-5.2L1.9 16c1.8 3.7 5.6 7 10.1 7z"/></svg>
+            Continue with Google
+        </a>
+        <a href="{% provider_login_url 'github' %}" class="social-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            Continue with GitHub
+        </a>
     </div>
+
+    <div class="divider">
+        <span>or use your account</span>
+    </div>
+
+    <!-- DJANGO LOGIN FORM -->
+    <form method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+
+        {% if form.errors %}
+            <div style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 10px; border-radius: 10px; font-size: 12px; margin-bottom: 14px; text-align: left;">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p><strong>{{ field.label }}:</strong> {{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="id_login">Username or Email</label>
+            <input type="text" name="login" id="id_login" class="form-input" placeholder="Enter username or email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_password">Password</label>
+            <input type="password" name="password" id="id_password" class="form-input" placeholder="Enter password" required>
+        </div>
+
+        <div class="form-extra">
+            <label>
+                <input type="checkbox" name="remember" id="id_remember" style="accent-color: #7c3aed;">
+                Remember me
+            </label>
+            <a href="{% url 'account_reset_password' %}">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-submit">Sign In</button>
+    </form>
+
+    <div class="auth-footer">
+        Don't have an account? <a href="{% url 'account_signup' %}">Sign up</a>
+    </div>
+</div>
 
 </body>
 </html>
