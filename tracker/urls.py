@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.views.generic import TemplateView
 
 urlpatterns = [
     # Navigation Views
@@ -30,4 +31,6 @@ urlpatterns = [
 
    path('note/<int:note_id>/update/', views.update_note, name='update_note'),
 path('goal/<int:goal_id>/update/', views.update_goal, name='update_goal'),
+
+path('privacy/', TemplateView.as_view(template_name='privacy.html'), name='privacy_policy'),
 ]
